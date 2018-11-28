@@ -1,19 +1,25 @@
-
+const ConsolaLog=require('../tools/tools.consola');
 const moment = require('node-moment');
 
-exports.AjustesPorServicio=function (fuente,nombreServicio)
+exports.AjustesPorServicio=function (fuente,conjuntocambios)
 {
-    //https://developer.mozilla.org/es/docs/Web/JavaScript/Referencia/Objetos_globales/JSON/stringify
-    
     //Aqui se debe buscar todos los cambios que requiere el nombre del servicio
+
     nuevores=fuente;
 
-    //Cambio de dato de prueba
-    nuevores.tarnomtit="Franco Zito";
+    //https://developer.mozilla.org/es/docs/Web/JavaScript/Referencia/Objetos_globales/JSON/stringify
+    
+    
+    //Como cambiar datos tipo String
+    //nuevores.tarnomtit="Franco Zito";
     //--------------------------------
 
-    nuevores.trnfecha=moment('11/20/2018').toISOString();
+    //Como cambiar formatos de fecha?
+    //nuevores.trnfecha=moment('11/20/2018').toISOString();
 
+    ConsolaLog.consolaLog("Proceso de ajuste de datos de acuerdo al suscriptor:")
+    nuevores.tarnomtit="Edinson Cavani";
+    
     return nuevores;
 }
 

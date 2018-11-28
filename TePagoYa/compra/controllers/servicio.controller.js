@@ -1,8 +1,8 @@
 const querystring=require('querystring');
 const Servicio=require('../models/servicio.model');
 const Herramientas=require('../models/tools.model');
-const FuncionesApoyo=require('../../tools/tools.convertir')
-const Controles=require('../negocio/tools.control');
+const AjustesDeDatos=require('../../tools/tools.convertir')
+const Controles=require('../negocio/negocio.control');
 const ConsolaLog=require('../../tools/tools.consola')
 const http=require('http');
 var rp = require('request-promise');
@@ -65,19 +65,22 @@ exports.inscribir=function(req,res){
     exports.procesarPago = function(req, res) {   
         ConsolaLog.consolaLog("**********************************************************************");
         ConsolaLog.consolaLog("Solicitud recibida en Te Pago Ya -> Comienzo de proceso de pago");
-        let resultadoControl=Controles.ControlDatosRecibidos(req.body);
+        let cuerpo=req.body;
+        let resultadoControl=Controles.ControlDatosRecibidos(cuerpo);
+
         resultadoControl="";
         let resultado="";
-
         if(resultadoControl.length>0){
            ConsolaLog.consolaLog("Se encontraron errores: " + resultadoControl);
            res.status(500).send({mensaje: 'Se encontraron errores: '+ resultadoControl });           
            res.send(resultado);        
           }
         else{
+            cuerpo=AjustesDeDatos.AjustesPorServicio(cuerpo,cuerpo.destino);
+            
             //--> si está todo OK
             ConsolaLog.consolaLog("Todos los controles OK, se continua con el proceso...");
-            var resultado1=procesoDePago(req.body,function(err,respuesta){
+            var resultado1=procesoDePago(cuerpo,function(err,respuesta){
                 res.send(respuesta);
             });
         }
@@ -111,12 +114,8 @@ exports.inscribir=function(req,res){
                     }
                 })
                 .catch(function (err) {
-                    //console.log(parsedBody);
-                    // ****** Se debe loguear que falló el request
+                    ConsolaLog.consolaLog(err);
                 });
-
-
-
             //------------------------------
         });
     }
