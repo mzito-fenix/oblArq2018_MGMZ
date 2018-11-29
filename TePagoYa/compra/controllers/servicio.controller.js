@@ -3,6 +3,7 @@ const Servicio=require('../models/servicio.model');
 const Herramientas=require('../models/tools.model');
 const AjustesDeDatos=require('../../tools/tools.convertir')
 const Controles=require('../negocio/negocio.control');
+const ApoyoCompra=require('../negocio/negocio.apoyocompra');
 const ConsolaLog=require('../../tools/tools.consola')
 const http=require('http');
 var rp = require('request-promise');
@@ -91,7 +92,7 @@ exports.inscribir=function(req,res){
     function procesoDePago(datosCompra,callback){
         console.log(datosCompra);
         ConsolaLog.consolaLog("Voy a consultar a =>" + datosCompra.destino);
-        resolverDestino(datosCompra.destino,function(error,destino){
+        ApoyoCompra.resolverDestino(datosCompra.destino,function(error,destino){
 
             //------ Llamada al nuevo destino
             rp({
@@ -120,15 +121,3 @@ exports.inscribir=function(req,res){
         });
     }
   
-    function resolverDestino(nombreServicio, callback){    
-        //Recibe el nombre del servicio y resuelve en la base de datos    
-        Servicio.findOne({ nombre: nombreServicio },function(err,servicio) {            
-            if(err) {            
-                callback(err.message,null);                        
-            } else if(!servicio) {
-                callback(null,'No se encuentra el servicio');
-            } else {
-                callback(null,servicio);
-            }
-        });
-    }
