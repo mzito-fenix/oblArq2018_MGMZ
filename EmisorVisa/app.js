@@ -3,7 +3,7 @@ const bodyParser = require('body-parser');
 const servicio=require('./routes/servicio.route');
 const mongoose = require('mongoose');
 const app = express();
-const ConsolaLog=require('./tools/tools.consola');
+const ConsolaLog=require('./log/tools.consola');
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
@@ -22,5 +22,7 @@ db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
 let port=3301;
 app.listen(port,() => {
-    ConsolaLog.consolaLog('El servidor EMISOR VISA está corriendo en el puerto= ' + port);
+    texto="El servidor EMISOR VISA está corriendo en el puerto= " + port;
+    console.log(texto)
+    ConsolaLog.LogSistema(texto);
 })

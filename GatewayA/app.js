@@ -3,7 +3,7 @@ const bodyParser = require('body-parser');
 const servicio=require('./routes/servicio.route');
 const mongoose = require('mongoose');
 const app = express();
-const ConsolaLog=require('./tools/tools.consola');
+const ConsolaLog=require('./log/tools.consola');
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));

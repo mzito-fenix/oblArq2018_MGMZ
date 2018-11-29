@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const servicio_controller=require('../controllers/servicio.controller');
-const ConsolaLog=require('../tools/tools.consola');
+const ConsolaLog=require('../log/tools.consola');
 
 
 //Estado del sistema

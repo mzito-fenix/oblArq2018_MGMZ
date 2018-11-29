@@ -1,5 +1,5 @@
 const moment = require('node-moment');
-const ConsolaLog=require('./tools.consola');
+const ConsolaLog=require('../log/tools.consola');
 
 exports.ControlDatosRecibidos=function (fuente)
 {

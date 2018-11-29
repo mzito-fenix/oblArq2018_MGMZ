@@ -1,8 +1,8 @@
 const FuncionesApoyo=require('../tools/tools.convertir');
 const Controles=require('../tools/tools.control');
-const ConsolaLog=require('../tools/tools.consola')
+const ConsolaLog=require('../log/tools.consola')
 const Tarjeta=require('../models/tarjeta.model');
-
+const Calculos=require('../tools/tools.nroaprobacion');
 
 
 exports.procesarPago = function(req, res) {   
@@ -21,29 +21,20 @@ exports.procesarPago = function(req, res) {
         //--> si está todo OK
         ConsolaLog.consolaLog("Todos los controles OK, se continua con el proceso...");
         var recibido=req.body;
-        resolverResultadoTransaccion(recibido,function(error,resultado){            
+        resolverResultadoTransaccion(recibido,function(error,resultadoControl){            
+            nroDeAprobacion="";
+            if(resultadoControl=="OK")
+               nroDeAprobacion=Calculos.NroAprobacion();
 
-            //Resultado temporal
-            resultado={ resultado:"OK", destino:'' };            
+            resultado={ resultado:resultadoControl, nroaprobacion:nroDeAprobacion, destino:'' };            
             res.send(resultado);
         });
     }
 }
 
 function resolverResultadoTransaccion(referenciaTarjeta, callback){    
-    //Resolver aqui si la tarjeta tiene credito y si puede hacer la compra
-    //Busco tarjeta
     resolverTarjeta(referenciaTarjeta.tarnro,function(err,tarjetabd){
-        console.log("**********************************************")
-        console.log(referenciaTarjeta);
-        console.log("****************DATOS ENCONTRADOS*************")
-        console.log(tarjetabd);
-        console.log("**********************************************")
-
         var resultadocontrol=controles(referenciaTarjeta,tarjetabd);
-
-        console.log(resultadocontrol);
-        
         callback(null,resultadocontrol);
     })
 }
@@ -54,9 +45,31 @@ function controles(TarjetaRecibida, TarjetaRegistrada){
         var resultado="OK";
     
         //Comparo con nro de seguridad
+        if(TarjetaRecibida.tarcodseg!=TarjetaRegistrada.tarcodseg)
+        {
+            resultado="NO";
+            ConsolaLog.LogSistema(TarjetaRecibida.tarnro + " - No coincide codigo de seguridad")            
+        }        
+
         //Comparo con saldo
-        //Comparo
-    
+        if(TarjetaRecibida.trnmonto>TarjetaRegistrada.saldodisponible){
+            resultado="NO";
+            ConsolaLog.LogSistema(TarjetaRecibida.tarnro + " - Saldo insuficiente")            
+        }
+        
+        let diaDeHoy = new Date();
+        let fechaTarjeta=TarjetaRecibida.tarvenc.toString();
+        //console.log(fechaTarjeta);
+        
+        //let fechaTar=Date(fechaTarjeta);
+
+        //console.log(fechaTar);
+
+        if(fechaTarjeta>=diaDeHoy){
+            resultado="NO";
+            ConsolaLog.LogSistema(TarjetaRecibida.tarnro + " - Tarjeta Vencida")            
+        }
+        
     
         return resultado;
 }
@@ -73,3 +86,4 @@ function resolverTarjeta(NroDeTarjeta, callback){
         }
     });
 }
+

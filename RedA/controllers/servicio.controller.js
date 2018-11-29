@@ -1,7 +1,7 @@
 const Emisorxcodigo=require('../models/emisorxcodigo.model');
 const FuncionesApoyo=require('../tools/tools.convertir');
 const Controles=require('../tools/tools.control');
-const ConsolaLog=require('../tools/tools.consola')
+const ConsolaLog=require('../log/tools.consola')
 const Negocio=require('../negocio/antifraude.negocio');
 
 

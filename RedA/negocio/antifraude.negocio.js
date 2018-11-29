@@ -1,8 +1,7 @@
-const ConsolaLog=require('../tools/tools.consola')
+const ConsolaLog=require('../log/tools.consola')
 const TransXTarjeta=require('../models/transxtarjeta.model');
 const Cripto=require('../tools/tools.cripto');
 const moment = require('node-moment');
-
 
 exports.registrarTransaccion = function(tarjeta, callback) { 
     let tarjetahash=Cripto.tohash(tarjeta);
