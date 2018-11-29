@@ -35,9 +35,18 @@ exports.registrarTransaccion = function(tarjeta, callback) {
     }
 
     exports.AlertaFraude= function(tarjeta, callback) {
-        console.log("antes de consultar los movs por registro");
-        obtenerMovsXTarjeta(tarjeta,function(cant){
-            console.log(cant);
-            callback(cant);    
-        });
+        var resultado="OK";
+        var cantMovsAlerta=CantMovsParaAlerta(function(cantref){
+            obtenerMovsXTarjeta(tarjeta,function(cant){
+                if(cant>=cantref){
+                   resultado="ALERTA";
+                }
+                callback(resultado);    
+            });
+    
+        })
     };
+
+    function CantMovsParaAlerta (callback) { 
+            callback(20);
+    }

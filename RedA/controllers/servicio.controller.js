@@ -24,7 +24,10 @@ exports.procesarPago = function(req, res) {
         //------ Ajustes 
         var TarjetaNro=recibido.tarnro;
         Negocio.registrarTransaccion(TarjetaNro,function(){
-            Negocio.AlertaFraude(TarjetaNro,function(){
+            Negocio.AlertaFraude(TarjetaNro,function(alertafraude){
+                if(alertafraude="ALERTA"){
+                    ConsolaLog.consolaLog("ALERTA DE FRAUDE: Tarjeta=" +TarjetaNro);
+                }
                 var referenciaTarjeta=TarjetaNro.substr(0,4);
                 console.log(referenciaTarjeta);
                 resolverDestino(referenciaTarjeta,function(error,destino){
