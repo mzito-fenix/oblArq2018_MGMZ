@@ -3,6 +3,7 @@ const Controles=require('../tools/tools.control');
 const ConsolaLog=require('../log/tools.consola')
 const Tarjeta=require('../models/tarjeta.model');
 const Calculos=require('../tools/tools.nroaprobacion');
+const moment = require('node-moment');
 
 
 exports.procesarPago = function(req, res) {   
@@ -57,20 +58,19 @@ function controles(TarjetaRecibida, TarjetaRegistrada){
             ConsolaLog.LogSistema(TarjetaRecibida.tarnro + " - Saldo insuficiente")            
         }
         
-        let diaDeHoy = new Date();
-        let fechaTarjeta=TarjetaRecibida.tarvenc.toString();
-        //console.log(fechaTarjeta);
+        diaDeHoy = new Date().toString();
         
-        //let fechaTar=Date(fechaTarjeta);
+    
+        let fechaTarjeta=TarjetaRecibida.tarvenc.toString();
+        
+        diaDeHoy=moment(diaDeHoy).format('MM/DD/YYYY');
+        fechaTarjeta=moment(fechaTarjeta).format('MM/DD/YYYY');
 
-        //console.log(fechaTar);
-
-        if(fechaTarjeta>=diaDeHoy){
+        if(diaDeHoy.Date>=fechaTarjeta.Date){
             resultado="NO";
             ConsolaLog.LogSistema(TarjetaRecibida.tarnro + " - Tarjeta Vencida")            
         }
-        
-    
+
         return resultado;
 }
 
