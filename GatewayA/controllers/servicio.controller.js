@@ -39,15 +39,29 @@ exports.procesarPago = function(req, res) {
         }
     }
 
+    var cache={};
+    var cantconsultas=0;
     function resolverDestino(referenciaTarjeta, callback){    
-        //Recibe el nombre del servicio y resuelve en la base de datos    
-        Redxcodigo.findOne({ referencia: referenciaTarjeta },function(err,redxcodigo) {            
-            if(err) {            
-                callback(err.message,null);                        
-            } else if(!redxcodigo) {
-                callback(null,'No se encuentra la referencia de la tarjeta');
-            } else {
-                callback(null,redxcodigo);
-            }
-        });
+        cantconsultas+=1;
+        if(cantconsultas==500){
+            console.log("se vacio cache");
+            cache={};
+        }
+        if(!cache[referenciaTarjeta]){
+            //Recibe el nombre del servicio y resuelve en la base de datos    
+            Redxcodigo.findOne({ referencia: referenciaTarjeta },function(err,redxcodigo) {            
+                console.log("Lo busque en la BD");
+                if(err) {            
+                    callback(err.message,null);                        
+                } else if(!redxcodigo) {
+                    callback(null,'No se encuentra la referencia de la tarjeta');
+                } else {
+                    cache[referenciaTarjeta]=redxcodigo;
+                    callback(null,redxcodigo);
+                }
+            });
+        }else{
+            console.log("Lo traje de la cache");
+            callback(null,cache[referenciaTarjeta]);
+        }
     }
