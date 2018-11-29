@@ -5,6 +5,8 @@ const AjustesDeDatos=require('../../tools/tools.convertir')
 const Controles=require('../negocio/negocio.control');
 const ApoyoCompra=require('../negocio/negocio.apoyocompra');
 const ConsolaLog=require('../../tools/tools.consola')
+const LogSistema=require('../../tools/tools.log')
+
 const http=require('http');
 var rp = require('request-promise');
 
@@ -29,7 +31,10 @@ exports.inscribir=function(req,res){
         var query = {  };
 
         Servicio.find(query,(err,servicio) => {
-            if(err) return res.status(500).send({message: 'Error al realizar la petición'});
+            if(err){
+                LogSistema.LogError("ERROR","ObtenerId: Error al buscar");
+                if(err) return res.status(500).send({message: 'Error al realizar la petición'});
+            }
             if(!servicio) res.status(404).send({message: 'El servicio buscado no se encuentra'});
             res.status(200).send({servicio})
         });
@@ -39,7 +44,10 @@ exports.inscribir=function(req,res){
     exports.obtenerId = function(req, res) {            
         let servicioId=req.params.id;
         Servicio.findById(servicioId,(err,servicio) => {
-            if(err) return res.status(500).send({message: 'Error al realizar la petición'});
+            if(err){
+                LogSistema.LogError("ERROR","ObtenerId: Error al buscar");
+                if(err) return res.status(500).send({message: 'Error al realizar la petición'});
+            }
             if(!servicio) res.status(404).send({message: 'El servicio buscado no se encuentra'});
             res.status(200).send({servicio})
         });
@@ -51,7 +59,10 @@ exports.inscribir=function(req,res){
         var query = { nombre: nombre };
 
         Servicio.find(query,(err,servicio) => {
-            if(err) return res.status(500).send({message: 'Error al realizar la petición'});
+            if(err){
+                LogSistema.LogError("ERROR","ObtenerId: Error al buscar");
+                if(err) return res.status(500).send({message: 'Error al realizar la petición'});
+            }
             if(!servicio) res.status(404).send({message: 'El servicio buscado no se encuentra'});
             res.status(200).send({servicio})
         });
@@ -64,34 +75,48 @@ exports.inscribir=function(req,res){
 
     
     exports.procesarPago = function(req, res) {   
+
+        LogSistema.LogError("FATAL","Prueba del log 4 JS");
+
         ConsolaLog.consolaLog("**********************************************************************");
-        ConsolaLog.consolaLog("Solicitud recibida en Te Pago Ya -> Comienzo de proceso de pago");
+        textoLog="Solicitud recibida en Te Pago Ya -> Comienzo de proceso de pago";
+        ConsolaLog.consolaLog(textoLog);
+        LogSistema.LogSistema(textoLog);
+        
         let cuerpo=req.body;
         let resultadoControl=Controles.ControlDatosRecibidos(cuerpo);
 
         resultadoControl="";
         let resultado="";
         if(resultadoControl.length>0){
-           ConsolaLog.consolaLog("Se encontraron errores: " + resultadoControl);
-           res.status(500).send({mensaje: 'Se encontraron errores: '+ resultadoControl });           
+           extoLog="Se encontraron errores: " + resultadoControl;
+           LogSistema.LogSistema(textoLog);
+           ConsolaLog.consolaLog(textoLog);
+           res.status(500).send({mensaje: textoLog });           
            res.send(resultado);        
           }
         else{
             cuerpo=AjustesDeDatos.AjustesPorServicio(cuerpo,cuerpo.destino);
             
             //--> si está todo OK
-            ConsolaLog.consolaLog("Todos los controles OK, se continua con el proceso...");
+            textoLog="Todos los controles OK, se continua con el proceso...";
+            LogSistema.LogSistema(textoLog);
+            ConsolaLog.consolaLog(textoLog);
             var resultado1=procesoDePago(cuerpo,function(err,respuesta){
                 res.send(respuesta);
             });
         }
-        ConsolaLog.consolaLog("Se espera próxima petición");
+        textoLog="Porceso finalizado - se espera próxima petición";
+        ConsolaLog.consolaLog(textoLog);
+        LogSistema.LogSistema(textoLog);
         ConsolaLog.consolaLog("**********************************************************************");
     }
     
     function procesoDePago(datosCompra,callback){
-        console.log(datosCompra);
-        ConsolaLog.consolaLog("Voy a consultar a =>" + datosCompra.destino);
+        textoLog="Voy a consultar a =>" + datosCompra.destino;
+        ConsolaLog.consolaLog(textoLog);
+        LogSistema.LogSistema(textoLog);
+
         ApoyoCompra.resolverDestino(datosCompra.destino,function(error,destino){
 
             //------ Llamada al nuevo destino
@@ -115,7 +140,7 @@ exports.inscribir=function(req,res){
                     }
                 })
                 .catch(function (err) {
-                    ConsolaLog.consolaLog(err);
+                    LogSistema.LogError("FATAL",err);
                 });
             //------------------------------
         });
