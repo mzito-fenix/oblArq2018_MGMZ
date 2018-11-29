@@ -5,7 +5,7 @@ const AjustesDeDatos=require('../../tools/tools.convertir')
 const Controles=require('../negocio/negocio.control');
 const ApoyoCompra=require('../negocio/negocio.apoyocompra');
 const ConsolaLog=require('../../tools/tools.consola')
-const LogSistema=require('../../tools/tools.log')
+const LogSistema=require('../../log/tools.log')
 
 const http=require('http');
 var rp = require('request-promise');
@@ -75,9 +75,6 @@ exports.inscribir=function(req,res){
 
     
     exports.procesarPago = function(req, res) {   
-
-        LogSistema.LogError("FATAL","Prueba del log 4 JS");
-
         ConsolaLog.consolaLog("**********************************************************************");
         textoLog="Solicitud recibida en Te Pago Ya -> Comienzo de proceso de pago";
         ConsolaLog.consolaLog(textoLog);
