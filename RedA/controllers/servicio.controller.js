@@ -2,7 +2,7 @@ const Emisorxcodigo=require('../models/emisorxcodigo.model');
 const FuncionesApoyo=require('../tools/tools.convertir');
 const Controles=require('../tools/tools.control');
 const ConsolaLog=require('../tools/tools.consola')
-
+const Negocio=require('../negocio/antifraude.negocio');
 
 
 exports.procesarPago = function(req, res) {   
@@ -23,20 +23,22 @@ exports.procesarPago = function(req, res) {
         var recibido=req.body;
         //------ Ajustes 
         var TarjetaNro=recibido.tarnro;
-        var referenciaTarjeta=TarjetaNro.substr(0,4);
-        console.log(referenciaTarjeta);
-        resolverDestino(referenciaTarjeta,function(error,destino){
-            //Se deben ajustar cosas    
-            recibido.destino=destino.emisor;
-            
-            //---------------------------
-
-            ConsolaLog.consolaLog("** Llegaron noticias...");
-            ConsolaLog.consolaLog(recibido);    
-            ConsolaLog.consolaLog("Se espera próxima petición");
-            ConsolaLog.consolaLog("**********************************************************************");    
-            res.send(recibido);
-        });
+        Negocio.registrarTransaccion(TarjetaNro,function(){
+            Negocio.AlertaFraude(TarjetaNro,function(){
+                var referenciaTarjeta=TarjetaNro.substr(0,4);
+                console.log(referenciaTarjeta);
+                resolverDestino(referenciaTarjeta,function(error,destino){
+                    //Se deben ajustar cosas    
+                    recibido.destino=destino.emisor;
+                    //---------------------------
+                    ConsolaLog.consolaLog("** Llegaron noticias...");
+                    ConsolaLog.consolaLog(recibido);    
+                    ConsolaLog.consolaLog("Se espera próxima petición");
+                    ConsolaLog.consolaLog("**********************************************************************");    
+                    res.send(recibido);
+                    });
+                });
+            });
     }
 }
 
