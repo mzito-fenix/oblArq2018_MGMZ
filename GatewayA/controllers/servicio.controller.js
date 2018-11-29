@@ -1,8 +1,8 @@
 const Redxcodigo=require('../models/redxcodigo.model');
 const FuncionesApoyo=require('../tools/tools.convertir');
 const Controles=require('../tools/tools.control');
-const ConsolaLog=require('../tools/tools.consola');
-const TransXTarjeta=require('../models/transxtarjeta.model');
+const ConsolaLog=require('../log/tools.consola');
+
 
 
 exports.procesarPago = function(req, res) {   
