@@ -6,6 +6,7 @@ const querystring=require('querystring');
 const http=require('http');
 var rp = require('request-promise');
 const gatewayXCateg=require('./negocio/negocio.gateway');
+const negocio=require('./negocio/negocio.compra');
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
@@ -42,20 +43,6 @@ gatewayDestino=gatewayXCateg.GatewayXCategoria(datosCompra.prdcategoria);
 datosCompra.destino=gatewayDestino;
 //------------------------------------------------------
 
-Log.LogSistema("Se va a enviar la solicitud de pago de la compra")
-    //------ Llamada al nuevo destino
-    rp({
-        method: 'POST',
-        uri: 'http://localhost:3000/servicios/procesarpago',
-        body: datosCompra,
-        json: true // Automatically stringifies the body to JSON
-    }).then(function (parsedBody) {            
-            var respuesta=parsedBody;
-            resultadoTransaccion="Resultado:" + respuesta.resultado + " Nro de aprob.: " + respuesta.nroaprobacion;
-            Log.LogSistema(resultadoTransaccion);                
-        })
-        .catch(function (err) {
-            Log.LogError("FATAL",err);
-        });
-    //------------------------------
-    
+negocio.EnvioDePago(datosCompra,function(){
+    Log.LogSistema("Proceso finalizado");
+});
