@@ -8,10 +8,6 @@ exports.AjustesPorServicio=function (fuente,nombreServicio)
     //Aqui se debe buscar todos los cambios que requiere el nombre del servicio
     nuevores=fuente;
 
-    //Cambio de dato de prueba
-    nuevores.tarnomtit="Franco Zito";
-    //--------------------------------
-
     nuevores.trnfecha=moment('11/20/2018').toISOString();
 
     return nuevores;

@@ -1,4 +1,3 @@
-const querystring=require('querystring');
 const Servicio=require('../models/servicio.model');
 const Herramientas=require('../models/tools.model');
 const AjustesDeDatos=require('../../tools/tools.convertir')

@@ -59,7 +59,6 @@ function controles(TarjetaRecibida, TarjetaRegistrada){
         }
         
         diaDeHoy = new Date().toString();
-        
     
         let fechaTarjeta=TarjetaRecibida.tarvenc.toString();
         

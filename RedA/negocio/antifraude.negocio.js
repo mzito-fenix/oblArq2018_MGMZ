@@ -49,5 +49,5 @@ exports.registrarTransaccion = function(tarjeta, callback) {
     function CantMovsParaAlerta (callback) { 
         //Este valor lo debe cargar desde un archivo de configuración
         //TO DO    
-        callback(20);
+        callback(50);
     }
