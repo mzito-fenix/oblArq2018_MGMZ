@@ -1,0 +1,65 @@
+*******  INSCRIPCION DE LOS SERVICIOS
+http://localhost:3000/servicios/inscribir
+
+{
+   "nombre":"GatewayA",
+   "servidor":"localhost",
+   "puerto":"3101"
+}
+
+{
+   "nombre":"GatewayB",
+   "servidor":"localhost",
+   "puerto":"3102"
+}
+
+{
+   "nombre":"RedA",
+   "servidor":"localhost",
+   "puerto":"3201"
+}
+{
+   "nombre":"RedB",
+   "servidor":"localhost",
+   "puerto":"3202"
+}
+
+{
+   "nombre":"EmisorVisa",
+   "servidor":"localhost",
+   "puerto":"3301"
+}
+
+{
+   "nombre":"EmisorMaster",
+   "servidor":"localhost",
+   "puerto":"3302"
+}
+
+
+************************************
+
+*** ENVIAR UN PAGO
+http://localhost:3000/servicios/procesarpago
+{
+   "tarnro":"4551101212341111",
+   "tarvenc":"04/2018",
+   "tarnomtit":"Luis Suárez",
+   "tarcodseg":"775",
+   "direnvcalle":"Passei del Toulat",
+   "direnvnro":"2923",
+   "direnvciudad":"Barcelona",
+   "direnvpais":"España",
+   "direnvcp":"123452",
+   "dirfaccalle":"Passei del Toulat",
+   "dirfacnro":"2923",
+   "dirfacciudad":"Barcelona",
+   "dirfacpais":"España",
+   "dirfaccp":"123452",
+   "trnmonto":"400",
+   "trnfecha":"11/20/2018",
+   "prdcant":"5",
+   "prdnombre":"Botines de Fútbol",
+   "prdcategoria":"Ropa",
+   "destino":"GatewayA"
+}
